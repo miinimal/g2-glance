@@ -1,0 +1,15 @@
+{
+  "updated": "2026-11-13T15:00:00-08:00",
+  "next_action": {
+    "title": "Reply to the venue about the Friday booking",
+    "where": "phone"
+  },
+  "deadlines": [
+    { "name": "Send the quarterly report", "at": "2026-11-14T19:00:00-08:00" },
+    { "name": "Renew the domain", "at": "2026-11-16T17:00:00-08:00" }
+  ],
+  "counters": {
+    "mentions": 4,
+    "decisions": 2
+  }
+}
