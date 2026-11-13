@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Glance</title>
+  </head>
+  <body>
+    <main>
+      <h1>Glance</h1>
+      <p class="lead">Your day at eye level: next action, next deadline, inbox counters and voice notes.</p>
+
+      <section class="preview-panel" aria-label="Glasses preview">
+        <h2>Glasses preview</h2>
+        <div class="glasses" role="img" aria-label="Text shown on the glasses">
+          <pre id="preview-header"></pre>
+          <pre id="preview-body" class="body"></pre>
+          <pre id="preview-footer"></pre>
+        </div>
+        <div class="controls">
+          <button type="button" id="btn-up">Swipe up</button>
+          <button type="button" id="btn-down">Swipe down</button>
+          <button type="button" id="btn-click">Tap</button>
+          <button type="button" id="btn-double">Double tap</button>
+        </div>
+        <p class="muted">Browser preview. In the Even App this text is on the glasses instead.</p>
+      </section>
+
+      <form id="settings">
+        <h2>Settings</h2>
+        <label for="feed-url">Glance feed URL</label>
+        <input id="feed-url" type="url" inputmode="url" autocomplete="off" placeholder="https://raw.githubusercontent.com/you/repo/main/feed.json" />
+        <p class="error" id="feed-error"></p>
+        <p class="muted">Leave empty to see demo data. Format: see the README.</p>
+
+        <label for="note-url">Voice note endpoint (optional)</label>
+        <input id="note-url" type="url" inputmode="url" autocomplete="off" placeholder="https://example.com/notes" />
+        <p class="error" id="note-error"></p>
+        <p class="muted">Notes are POSTed as audio/wav. Without an endpoint they stay on this phone.</p>
+
+        <label for="note-token">Endpoint token (optional)</label>
+        <input id="note-token" type="password" autocomplete="off" placeholder="sent as Authorization: Bearer" />
+
+        <p class="hint" id="whitelist-hint" hidden></p>
+        <button type="submit">Save</button> <span id="saved" class="muted"></span>
+        <p id="status" class="muted"></p>
+      </form>
+
+      <section>
+        <h2>Voice notes on this phone</h2>
+        <div id="notes"></div>
+      </section>
+
+      <section class="muted">
+        <h2>Gestures</h2>
+        <p>Swipe up/down: switch page. Tap: refresh. Double tap: exit. On Voice note: hold to record, release to stop.</p>
+      </section>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

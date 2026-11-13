@@ -1,0 +1,25 @@
+{
+  "package_id": "com.miinimal.glance",
+  "edition": "202601",
+  "name": "Glance",
+  "version": "0.1.0",
+  "min_app_version": "2.2.10",
+  "min_sdk_version": "0.0.16",
+  "entrypoint": "index.html",
+  "permissions": [
+    {
+      "name": "network",
+      "desc": "Downloads your glance feed (next action, deadlines, counters) from the URL you set, and sends voice notes to the endpoint you set.",
+      "whitelist": [
+        "https://raw.githubusercontent.com"
+      ]
+    },
+    {
+      "name": "g2-microphone",
+      "desc": "Records a voice note from the glasses microphone while you hold the touchpad on the Voice note page."
+    }
+  ],
+  "supported_languages": [
+    "en"
+  ]
+}
