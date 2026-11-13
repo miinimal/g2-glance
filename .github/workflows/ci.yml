@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Check (Node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [20, 22]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Test
+        run: npm test
+      - name: Build
+        run: npm run build
+      - name: Pack .ehpk
+        run: npx evenhub pack app.json dist --sdk-ver 0.0.16 -o g2-glance.ehpk
+      - name: Checksum
+        run: sha256sum g2-glance.ehpk | tee g2-glance.ehpk.sha256
+      - name: Upload package
+        if: matrix.node == 22
+        uses: actions/upload-artifact@v7
+        with:
+          name: g2-glance-ehpk
+          path: |
+            g2-glance.ehpk
+            g2-glance.ehpk.sha256
+          if-no-files-found: error
