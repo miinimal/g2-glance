@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { checkUrl, parseSettings, whitelistEntry } from '../src/core/settings';
+import { checkUrl, parseSettings, parseUrl, whitelistEntry } from '../src/core/settings';
 
 const read = (path: string) => JSON.parse(readFileSync(new URL(path, import.meta.url), 'utf8'));
 const app = read('../app.json');
@@ -77,5 +77,44 @@ describe('settings', () => {
       noteUrl: '',
       noteToken: '',
     });
+  });
+});
+
+describe('parseUrl (no URL global in the Mentra background)', () => {
+  it.each([
+    ['https://Example.com/feed.json?x=1#y', { scheme: 'https', host: 'example.com', port: null }],
+    ['http://localhost:8787', { scheme: 'http', host: 'localhost', port: '8787' }],
+    ['https://[::1]:8443/a', { scheme: 'https', host: '[::1]', port: '8443' }],
+  ])('parses %s', (url, parsed) => {
+    expect(parseUrl(url)).toEqual(parsed);
+  });
+
+  it.each(['example.com', 'https://', 'https://exa mple.com', 'https://user@example.com', 'https://a..b', 'https://a.com:99999', 'https://.a.com'])(
+    'rejects %j',
+    (url) => {
+      expect(parseUrl(url)).toBeNull();
+    },
+  );
+
+  it('drops default ports from whitelist origins like a browser', () => {
+    expect(whitelistEntry('https://a.com:443/x')).toBe('https://a.com');
+    expect(whitelistEntry('https://a.com:8443/x')).toBe('https://a.com:8443');
+    expect(whitelistEntry('HTTPS://A.COM/feed')).toBe('https://a.com');
+  });
+});
+
+describe('mentra/miniapp.json', () => {
+  const mini = read('../mentra/miniapp.json');
+
+  it('matches the Even Hub package and the repository version', () => {
+    expect(mini.packageName).toBe(app.package_id);
+    expect(mini.version).toBe(pkg.version);
+    expect(mini.name).toBe(app.name);
+  });
+
+  it('declares exactly what the miniapp uses', () => {
+    expect(mini.permissions.map((p: { type: string }) => p.type)).toEqual(['MICROPHONE']);
+    expect(mini.entry).toEqual({ background: 'background/index.js', ui: 'ui/index.html' });
+    expect(mini.hardwareRequirements).toContainEqual(expect.objectContaining({ type: 'DISPLAY', level: 'REQUIRED' }));
   });
 });
