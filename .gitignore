@@ -7,3 +7,5 @@ dist/
 coverage/
 sdkprobe/
 .DS_Store
+mentra/dist/
+mentra/build/

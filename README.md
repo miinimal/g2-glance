@@ -3,9 +3,10 @@
 [![CI](https://github.com/miinimal/g2-glance/actions/workflows/ci.yml/badge.svg)](https://github.com/miinimal/g2-glance/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-Your day at eye level on the [Even Realities G2](https://www.evenrealities.com): the next action,
-the next deadline with a live countdown, inbox counters, and voice notes from the glasses
-microphone.
+Your day at eye level on the [Even Realities G2](https://www.evenrealities.com) and on
+[MentraOS](https://github.com/Mentra-Community/MentraOS) glasses: the next action, the next
+deadline with a live countdown, inbox counters, and voice notes from the glasses microphone.
+One TypeScript core, two glasses platforms.
 
 | Next action | Next deadline |
 | --- | --- |
@@ -68,6 +69,7 @@ Scan it from the Even App's developer mode. The phone and the computer must be o
 ```bash
 npm run build
 npm run pack
+npm run mentra:build
 ```
 
 This writes `g2-glance.ehpk`. A ready-made package is attached to every
@@ -84,6 +86,38 @@ npx @evenrealities/evenhub-simulator@0.9.5 http://127.0.0.1:5173/
 
 Or open http://127.0.0.1:5173/ in a browser: outside the Even App the page shows a preview of the
 glasses text with buttons for the gestures.
+
+## MentraOS
+
+The same app runs as a [Mentra miniapp](https://github.com/Mentra-Community/MentraOS/tree/dev/mobile/modules/miniapp)
+(`@mentra/miniapp` 3.4.0), from [`mentra/`](mentra). It uses the same core, feed format, pages and
+settings; only the platform adapters differ.
+
+| | Even Hub (G2) | MentraOS |
+| --- | --- | --- |
+| Switch page | swipe up / down | swipe up / down |
+| Refresh | tap | tap |
+| Voice note | hold, release | long press to start, long press again to stop (Mentra reports no release) |
+| Exit | double tap (system dialog) | closed from the Mentra App |
+| Notes kept on the phone | newest 20, up to 2:00 each | newest 3, up to 1:00 each (string storage) |
+| Network whitelist | `app.json` | not needed |
+
+Build and pack (needs [Bun](https://bun.sh) 1.3+; packing needs `zip`, so Linux or macOS):
+
+```bash
+npm install
+npm run mentra:build
+npm run mentra:pack
+```
+
+The package is written to `mentra/build/`; every CI run attaches it as an artifact. To develop on
+a phone, run `npx mentra-miniapp dev` from `mentra/` after a build and scan the QR code from the
+Mentra App. The miniapp is built and unit-tested with a fake session; it has not yet been run on
+Mentra hardware.
+
+The build runs Mentra's background-runtime check over every bundled file, the shared core
+included, so the core never picks up browser-only APIs (it parses URLs without the `URL` global
+for this reason).
 
 ## The glance feed
 
@@ -176,7 +210,14 @@ src/
     controller.ts  GlanceApp: runs the core against ports (glasses, storage, clock, fetch)
   bridge/        the only code that touches the Even Hub SDK or browser storage
   main.ts        phone settings page and wiring
+mentra/
+  src/background/  Mentra adapters (display scene, touch, microphone, storage) and the entry
+  src/ui/          settings WebView, talking to the background over typed channels
+  build.ts         two-bundle build with the background-runtime check
 ```
+
+`src/core` and `src/app` are the shared core: both platforms run the same `GlanceApp`, and
+each provides its own ports for the display, input, microphone and storage.
 
 The glasses page is three text containers (header, body, footer) created once with
 `createStartUpPageContainer`; after that only containers whose text changed are updated with
@@ -196,7 +237,8 @@ npm run pack
 
 - Settings for the stale threshold and refresh period.
 - A feed adapter for calendars (ICS) and task apps.
-- A MentraOS miniapp from the same core, so the same four pages run on Mentra glasses.
+- Calendar deadlines from the phone on MentraOS (`session.phone.calendar`).
+- Run the MentraOS miniapp on hardware and record a demo.
 - Even Hub store submission.
 
 ## License

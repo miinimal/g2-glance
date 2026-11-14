@@ -1,0 +1,25 @@
+{
+  "$schema": "../node_modules/@mentra/miniapp-cli/schema/miniapp.schema.json",
+  "packageName": "com.miinimal.glance",
+  "version": "0.2.0",
+  "name": "Glance",
+  "description": "Your day at eye level: next action, next deadline with a live countdown, inbox counters and voice notes, from a JSON feed you host.",
+  "icon": "icon.png",
+  "type": "standard",
+  "sdkVersion": "0.3.0",
+  "minHostVersion": "3.5.0",
+  "entry": {
+    "background": "background/index.js",
+    "ui": "ui/index.html"
+  },
+  "permissions": [
+    {
+      "type": "MICROPHONE",
+      "description": "Records a voice note while you long press on the Voice note page."
+    }
+  ],
+  "hardwareRequirements": [
+    {"type": "DISPLAY", "level": "REQUIRED", "description": "Shows the four glance pages"},
+    {"type": "MICROPHONE", "level": "OPTIONAL", "description": "Voice notes"}
+  ]
+}

@@ -16,5 +16,6 @@
     "skipLibCheck": true,
     "noEmit": true
   },
-  "include": ["src", "tests", "vite.config.ts", "app.json"]
+  "include": ["src", "tests", "vite.config.ts", "app.json"],
+  "exclude": ["tests/mentra.test.ts"]
 }

@@ -1,0 +1,10 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    // @mentra/miniapp ships TypeScript sources (and pulls in @mentra/cloud-protocol sources) that
+    // do not compile under noUncheckedIndexedAccess, and skipLibCheck does not cover .ts files.
+    "noUncheckedIndexedAccess": false
+  },
+  "include": ["src", "../tests/mentra.test.ts"],
+  "exclude": []
+}
