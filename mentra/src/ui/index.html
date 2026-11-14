@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Glance</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main id="root">
+      <header class="bar">
+        <h1>Glance</h1>
+      </header>
+      <p class="muted">Your day at eye level: next action, next deadline, inbox counters and voice notes.</p>
+
+      <section aria-label="Glasses preview">
+        <h2>On your glasses</h2>
+        <div class="glasses" role="img" aria-label="Text shown on the glasses">
+          <pre id="preview-header"></pre>
+          <pre id="preview-body" class="body"></pre>
+          <pre id="preview-footer"></pre>
+        </div>
+        <div class="controls">
+          <button type="button" data-gesture="swipe_up">Previous</button>
+          <button type="button" data-gesture="swipe_down">Next</button>
+          <button type="button" data-gesture="single_tap">Refresh</button>
+        </div>
+        <p id="status" class="muted"></p>
+      </section>
+
+      <form id="settings">
+        <h2>Settings</h2>
+        <label for="feed-url">Glance feed URL</label>
+        <input id="feed-url" type="url" inputmode="url" autocomplete="off" placeholder="https://raw.githubusercontent.com/you/repo/main/feed.json" />
+        <p class="error" id="feed-error"></p>
+        <p class="muted">Leave empty to see demo data.</p>
+
+        <label for="note-url">Voice note endpoint (optional)</label>
+        <input id="note-url" type="url" inputmode="url" autocomplete="off" placeholder="https://example.com/notes" />
+        <p class="error" id="note-error"></p>
+
+        <label for="note-token">Endpoint token (optional)</label>
+        <input id="note-token" type="password" autocomplete="off" placeholder="sent as Authorization: Bearer" />
+
+        <button type="submit">Save</button> <span id="saved" class="muted"></span>
+      </form>
+
+      <section>
+        <h2>Voice notes</h2>
+        <div id="notes"></div>
+      </section>
+
+      <section class="muted">
+        <h2>Gestures</h2>
+        <p>Swipe up/down: switch page. Tap: refresh. Long press on Voice note: start recording, long press again: stop.</p>
+      </section>
+    </main>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

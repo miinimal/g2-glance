@@ -43,3 +43,32 @@ jobs:
             g2-glance.ehpk
             g2-glance.ehpk.sha256
           if-no-files-found: error
+
+  mentra:
+    name: MentraOS miniapp
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.4
+      - run: npm ci
+      - name: Build background and UI bundles
+        run: npm run mentra:build
+      - name: Pack miniapp
+        run: npm run mentra:pack
+      - name: Checksum
+        run: |
+          cd mentra/build
+          ls -la
+          sha256sum *.zip | tee SHA256SUMS
+      - name: Upload package
+        uses: actions/upload-artifact@v7
+        with:
+          name: glance-mentra-miniapp
+          path: mentra/build/
+          if-no-files-found: error

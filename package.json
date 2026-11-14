@@ -1,8 +1,8 @@
 {
   "name": "g2-glance",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
-  "description": "Your day at eye level on Even Realities G2: next action, next deadline, inbox counters and voice notes.",
+  "description": "Your day at eye level on Even Realities G2 and MentraOS: next action, next deadline, inbox counters and voice notes.",
   "license": "MIT",
   "author": "Aleksandr Shcherbakov",
   "repository": {
@@ -16,19 +16,23 @@
   "scripts": {
     "dev": "vite --host",
     "build": "vite build",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p mentra",
     "test": "vitest run",
     "test:watch": "vitest",
     "check": "npm run typecheck && npm test && npm run build",
     "pack": "evenhub pack app.json dist --sdk-ver 0.0.16 -o g2-glance.ehpk",
-    "screenshots": "node scripts/screenshots.mjs"
+    "screenshots": "node scripts/screenshots.mjs",
+    "mentra:build": "bun run mentra/build.ts",
+    "mentra:pack": "cd mentra && bun ../node_modules/@mentra/miniapp-cli/src/index.ts pack --no-build"
   },
   "dependencies": {
     "@evenrealities/even_hub_sdk": "0.0.16",
-    "@evenrealities/pretext": "0.1.4"
+    "@evenrealities/pretext": "0.1.4",
+    "@mentra/miniapp": "3.4.0"
   },
   "devDependencies": {
     "@evenrealities/evenhub-cli": "0.2.0",
+    "@mentra/miniapp-cli": "0.1.0-beta.2",
     "@types/node": "^22.20.5",
     "fake-indexeddb": "^6.2.8",
     "typescript": "^5.9.3",
